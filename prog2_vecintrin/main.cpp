@@ -305,16 +305,27 @@ float arraySumSerial(float* values, int N) {
 // You can assume N is a multiple of VECTOR_WIDTH
 // You can assume VECTOR_WIDTH is a power of 2
 float arraySumVector(float* values, int N) { 
-  __cs149_vec_float sums;
-  __cs149_mask maskAll; 
+  __cs149_vec_float new_vals;
+  __cs149_vec_float prev_sum = _cs149_vset_float(0.f);
+  __cs149_mask maskAll, maskFinalSum;
+  maskFinalSum = _cs149_init_ones();
+
   for (int i=0; i<N; i+=VECTOR_WIDTH) {
       maskAll = _cs149_init_ones();
-      _cs149_vload_float(sums, values+i, maskAll);
-
-      _cs149_hadd_float(sums, sums);
-      _cs149_interleave_float(sums, sums);
+      _cs149_vload_float(new_vals, values+i, maskAll);
+      _cs149_vadd_float(prev_sum, prev_sum, new_vals, maskAll);
   }
 
-  return 0.0;
+  int hadd_times = VECTOR_WIDTH;
+  while (hadd_times > 1) {
+      _cs149_hadd_float(prev_sum, prev_sum);
+      _cs149_interleave_float(prev_sum, prev_sum);
+      hadd_times /= 2;
+  }
+
+  float finalSum[VECTOR_WIDTH];
+  _cs149_vstore_float(finalSum, prev_sum, maskAll);
+
+  return finalSum[0];
 }
 

@@ -38,9 +38,7 @@ void workerThreadStart(WorkerArgs * const args) {
     // int startRow = args->threadId * numRows;
 
     for (int i = args->threadId; i < int(args->height); i+=args->numThreads) {
-
         mandelbrotSerial(args->x0, args->y0, args->x1, args->y1, args->width, args->height, i, 1, args->maxIterations, args->output);
-
     }
 }
 
