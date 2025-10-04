@@ -111,7 +111,7 @@ int main() {
 
     printf("\t\t\t\t(%.2fx speedup from ISPC)\n", minSerial/minISPC);
     printf("\t\t\t\t(%.2fx speedup from task ISPC)\n", minSerial/minTaskISPC);
-    printf("\t\t\t\t(%.2fx speedup from vector (no ISPC)\n", minSerial/minVector);
+    printf("\t\t\t\t(%.2fx speedup from vector (no ISPC))\n", minSerial/minVector);
 
     delete [] values;
     delete [] output;
